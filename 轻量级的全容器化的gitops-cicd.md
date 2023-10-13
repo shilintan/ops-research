@@ -347,7 +347,7 @@ service-auth-gateway
 
 特定于java项目, 其他类型的项目也类似
 
-# env方式
+## env方式
 
 ```
 spring.config.import=optional:file:env/.env[.properties]
@@ -376,7 +376,7 @@ configmap
 env: JAVA_OPTS
 ```
 
-# nacos方式
+## nacos方式
 
 每个环境部署一个nacos, 服务在运行时直接连接nacos
 
@@ -385,3 +385,42 @@ env: JAVA_OPTS
 运维维护jasypt密钥, 服务运行时注入jasypt 密钥
 
 配置文件中通过ENC(密文)保护敏感信息
+
+
+
+# gitflow流程
+
+## 环境概览
+
+开发环境
+
+​	研发人员共用服务
+
+测试环境
+
+​	测试人员测试业务
+
+灰度环境
+
+​	部分用户、部分域名长期使用
+
+​	生产环境临时使用
+
+生产环境
+
+​	全部用户使用的环境
+
+## git分支流程
+
+main分支作为起点
+
+test, dev
+
+依次合并dev>test>main
+
+新功能在feature-<功能名>分支开发
+
+修复bug在bugfix-<bug名>分支开发
+
+基于main拉出来的tag作为生产环境发布代码, 生产环境镜像tag以git tag为准, deploy/svc version
+
