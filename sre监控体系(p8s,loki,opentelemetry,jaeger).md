@@ -1,0 +1,117 @@
+# 思路
+
+前端和后端的指标、事件、日志、性能
+
+
+
+采集指标, 顺着网络进行采集, 记录指标, 至少保留一个月, 对指标的饱和度(80%)和状态进行告警
+
+​	slb, nat, ecs, k8s, k8s master, k8s woker,k8s pod, cillium
+
+​	nginx, jvm, 中间件指标(mysql, redis, rabbitmq, es), 应用中间件指标(seata, xxljob, nacos)
+
+​	服务接口自动定时查询(httpGet)生成指标
+
+采集event, event告警
+
+​	k8s event
+
+记录日志文件、采集日志文件、对日志文件进行告警
+
+采集性能, 客户端嵌入式agent, 对性能进行告警
+
+​	nginx access log
+
+​	java opentracing
+
+​	mysql slowlog
+
+​	redis slowlog
+
+​	rabbitmq 堆积量
+
+​	mongodb slowlog
+
+​	es slowlog
+
+服务自检
+
+​	springboot-actuator
+
+​		中间件连接检查
+
+​		连接池可用率检查
+
+充分利用云厂商提供的监控指标
+
+# 指标
+
+公共指标:
+
+​	cpu使用率
+
+​	memory使用率
+
+​	disk使用率
+
+## mysql
+
+slow log > 100
+
+连接使用率 < 80%, 代码上出现不释放连接的问题, 一般情况下不会被用到很多, 可以通过配置文件调整大小, 但是也受到操作系统资源情况限制
+
+buffer pool read 读取率 < 99%, 防止数据没有被内存缓存到而从磁盘加载导致慢SQL
+
+buffer pool 利用率 < 5%, 有大量不带索引条件查询的SQL被查询, 而且缓存配置有问题需要调整
+
+脏页比例 > 75%, 超过75%后如果有写入压力则会导致写入卡顿, 解决方式: 优化磁盘、分库分表分实例解决、提高redo log文件大小(innodb_log_file_size)
+
+
+
+其他
+
+
+
+## redis
+
+slow log > 100
+
+拒绝连接数量 > 100, 解决: 客户端定时检查redis连接, 且检查时间间隔要小于服务端配置
+
+阻塞key数量 > 100, 解决: 优化网络(内核优化、分散集群、backlog调大、降低网络延迟)、提高网络配置(升配), 查看有哪些大key并优化大key, 根据业务类型划分到多个redis实例, 降低fork频率, 并发压力过大, 输出缓冲区大小调高(或者不限制)、使用redis-cluster替代redis、优化内核(文件描述符、进程)
+
+key命中率 < 10%, 出现原因: 并发锁判空、缓存清理, 处理: 提高内存, 数据预热, 过期时间上加随机值以防止同时过期, 判断层不放在redis上做, 代码异常(代码死循环)
+
+
+
+## rabbitmq
+
+
+
+
+
+## elasticsearch
+
+
+
+
+
+## mongodb
+
+
+
+
+
+## seata
+
+
+
+
+
+## nacos
+
+
+
+
+
+## xxljob

@@ -97,6 +97,44 @@ yidongyun-robot-k8s
 
 #  java17-group类型项目流水线思路
 
+## 代码打包插件
+
+```
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+```
+
+## 配置依赖仓库
+
+```
+    <distributionManagement>
+        <repository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </repository>
+    </repositories>
+```
+
+
+
 ## 原始的项目目录结构
 
 ```
@@ -424,3 +462,20 @@ test, dev
 
 基于main拉出来的tag作为生产环境发布代码, 生产环境镜像tag以git tag为准, deploy/svc version
 
+
+
+# 效果
+
+创建一个代码仓库/创建一个模块目录
+
+添加ci文件
+
+创建test/main分支
+
+提交代码
+
+runner接收到请求之后创建runner pod, 创建流水线生命的pod, 执行流水线
+
+最大承载量取决于k8s集群资源大小(目前暂时只能在单台宿主机上, 调整成共享目录之后可以全集群)
+
+代码上线效果由研发自己控制
