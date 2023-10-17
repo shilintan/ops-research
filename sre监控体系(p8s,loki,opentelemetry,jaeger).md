@@ -1,10 +1,26 @@
+[toc]
+
 # 思路
 
-前端和后端的指标、事件、日志、性能
+通过 采集和存储前后端全端全链路的指标、事件、日志、性能, 生成告警通知, 主动发现异常并解决
 
 
 
-采集指标, 顺着网络进行采集, 记录指标, 至少保留一个月, 对指标的饱和度(80%)和状态进行告警
+充分利用云厂商提供的监控
+
+关闭不能使用的功能， 提高告警灵敏度
+
+
+
+链接仓库:	https://github.com/shilintan/monitor-research
+
+# 指标
+
+链接仓库:	https://github.com/shilintan/monitor-research/tree/main/metrics/base
+
+## 指标采集
+
+按照网络流入顺序采集指标
 
 ​	slb, nat, ecs, k8s, k8s master, k8s woker,k8s pod, cillium
 
@@ -12,55 +28,17 @@
 
 ​	服务接口自动定时查询(httpGet)生成指标
 
-采集event, event告警
 
-​	k8s event
 
-记录日志文件、采集日志文件、对日志文件进行告警
+### ecs
 
-采集性能, 客户端嵌入式agent, 对性能进行告警
+cpu使用率、iowait(20ms)
 
-​	nginx access log
+memory使用率
 
-​	java opentracing
+disk使用率、io耗时(20ms)
 
-​	mysql slowlog
-
-​	redis slowlog
-
-​	rabbitmq 堆积量
-
-​	mongodb slowlog
-
-​	es slowlog
-
-服务自检
-
-​	springboot-actuator
-
-​		中间件连接检查
-
-​		连接池可用率检查
-
-充分利用云厂商提供的监控指标
-
-# 指标
-
-饱和度、状态
-
-公共指标:
-
-​	cpu使用率
-
-​	memory使用率
-
-​	disk使用率
-
-## ecs
-
-iowait
-
-## mysql
+### mysql
 
 slow log > 100
 
@@ -78,7 +56,7 @@ buffer pool 利用率 < 5%, 有大量不带索引条件查询的SQL被查询, �
 
 
 
-## redis
+### redis
 
 slow log > 100
 
@@ -90,7 +68,7 @@ key命中率 < 10%, 出现原因: 并发锁判空、缓存清理, 处理: 提高
 
 
 
-## rabbitmq
+### rabbitmq
 
 消息堆积量 > 500, 解决: 看系统是否有异常、rabbitmq负载是否过高、消费队列提高
 
@@ -98,38 +76,106 @@ key命中率 < 10%, 出现原因: 并发锁判空、缓存清理, 处理: 提高
 
 
 
-## elasticsearch
+### elasticsearch
 
 jvm使用率 > 80%, 升级配置, 配置索引
 
 
 
-## mongodb
+### mongodb
 
 连接数量 < 1, 看服务为什么宕机了
 
 
 
-## seata
+### seata
 
 
 
 
 
-## nacos
+### xxljob
 
 
 
+## 指标存储
 
+至少存储一个月的数据, 必要时使用远程存储(VictoriaMetrics)
 
-## xxljob
+## 指标告警通知
 
-
+80%饱和度、阈值、状态
 
 
 
 # 日志
 
-服务要集成日志框架, 按日志级别打印日志
+链接仓库:	https://github.com/shilintan/monitor-research/tree/main/tracing
+
+写日志文件、采集日志文件、异常日志告警
+
+
+
+服务集成日志框架, 按日志级别打印日志
 
 日志中要包含traceid
+
+
+
+# 事件
+
+链接仓库:	https://github.com/shilintan/monitor-research/tree/main/event/k8s
+
+
+
+采集event, event告警
+
+​	k8s event
+
+​		服务自检
+
+​			springboot-actuator
+
+​				中间件连接检查
+
+​				连接池可用率检查
+
+
+
+
+
+# 性能
+
+链接仓库:	https://github.com/shilintan/monitor-research/tree/main/tracing
+
+
+
+客户端嵌入式采集agent, 采集性能, 对性能进行告警
+
+​	java opentelemetry
+
+
+
+通过日志文件计算性能
+
+​	nginx access log	
+
+​	mysql slowlog
+
+​	redis slowlog
+
+​	rabbitmq 堆积量
+
+​	mongodb slowlog
+
+​	es slowlog
+
+
+
+# 告警
+
+关闭不能使用的功能， 提高告警灵敏度
+
+
+
+# 事件管理

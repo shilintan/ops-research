@@ -331,43 +331,9 @@ hpa, vpa
 
 ### 监控
 
-前端和后端的指标、事件、日志、性能
+通过 采集和存储前后端全端全链路的指标、事件、日志、性能, 生成告警通知, 主动发现异常并解决
 
 
-
-采集指标, 顺着网络进行采集, 记录指标, 至少保留一个月, 对指标的饱和度(80%)和状态进行告警
-
-​	slb, nat, ecs, k8s, k8s master, k8s woker,k8s pod, cillium
-
-​	nginx, jvm, 中间件指标(mysql, redis, rabbitmq, es), 应用中间件指标(seata, xxljob, nacos)
-
-​	服务接口自动定时查询(httpGet)生成指标
-
-采集event, event告警
-
-​	k8s event
-
-记录日志文件、采集日志文件、对日志文件进行告警
-
-采集性能, 客户端嵌入式agent, 对性能进行告警
-
-​	nginx access log
-
-​	java opentracing
-
-​	mysql slowlog
-
-​	redis slowlog
-
-​	rabbitmq 堆积量
-
-​	mongodb slowlog
-
-​	es slowlog
-
-充分利用云厂商提供的监控指标
-
-不能使用的功能就关闭, 而不是让它产生异常日志, 导致事故敏感性降低
 
 #### 通知
 
