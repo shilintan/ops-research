@@ -363,6 +363,12 @@ deploy
 service-shop-gateway
 ```
 
+## service/.gitlab-ci.type
+
+```
+group-deploy
+```
+
 ## service/auth-service/.gitlab-ci.type
 
 ```
