@@ -122,6 +122,22 @@ jvm使用率 > 80%, 升级配置, 配置索引
 
 
 
+服务日志
+
+```
+{scrape_job="service",app=~"service-.*"}|= "Exception"!="ServiceException"
+```
+
+中间件日志
+
+​	seata
+
+```
+{app="seata-server",namespace="prod",scrape_job="kubernetes-pods"}|="Exception"
+```
+
+
+
 # 事件
 
 链接仓库:	https://github.com/shilintan/monitor-research/tree/main/event/k8s
@@ -179,3 +195,12 @@ jvm使用率 > 80%, 升级配置, 配置索引
 
 
 # 事件管理
+
+
+
+
+
+
+
+# 问题
+
